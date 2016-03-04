@@ -1,7 +1,30 @@
 $(function(){
-    function blockWithReason(tweet)
-    {
+    var blockTemplate = `
+    <div class='blockWithReasonContainer'>
+        <h2>Block With Reason</h2>
+        <div>
+        Block @<span class="user"></span> because <input class="blockReason" />
+        <button class="btn" type="button">Block</button>
+        </div>
+    </div>
+    `
+    function blockWithReason(tweet){
+        var tweetId = $(tweet).data("tweet-id");
+        var screenName = $(tweet).data("screen-name");
+        var userId = $(tweet).data("user-id");
         console.log("Blocking with a reason", tweet);
+        var template = $(blockTemplate);
+        
+        $(".user",template).text(screenName);
+        
+        $("button", template).click(function(){
+            $.featherlight.current().close();
+            chrome.runtime.sendMessage({"action":"block","forTweet":tweetId,"who":screenName,"userId":userId, reason:$(".blockReason").val() },function(response){
+                console.log(response);
+            });
+        });
+        
+        $.featherlight(template,$.featherlight.defaults);
     }
     
     function addMenuItem(root, tweet){
