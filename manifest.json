@@ -21,6 +21,7 @@
   },
   "permissions": [
     "https://twitter.com/",
-    "storage"
+    "storage",
+    "tabs"
   ]
 }
